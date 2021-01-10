@@ -1,0 +1,32 @@
+version: '3'
+services: 
+  app:
+    container_name: 'django'
+    command: python manage.py runserver 0:8000
+    build: .
+    depends_on:
+      - db
+      - cache
+    ports: 
+      - '8000:8000'
+    tty: true
+    volumes:
+      - ./:/usr/src/app
+  db:
+    container_name: 'postgres'
+    image: postgres
+    environment:
+      - POSTGRES_DB=django
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  cache:
+    container_name: memcached
+    image: memcached
+    ports:
+      - '11211:11211'
+volumes:
+  db_data:

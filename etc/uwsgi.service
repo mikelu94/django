@@ -1,0 +1,12 @@
+[Unit]
+Description=Django Application
+
+[Service]
+Type=simple
+PIDFile=/app/django/etc/uwsgi.pid
+User=root
+Group=root
+WorkingDirectory=/app/django/
+ExecStart=/usr/local/bin/uwsgi /app/django/etc/uwsgi.ini
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
