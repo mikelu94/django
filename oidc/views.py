@@ -18,18 +18,18 @@ oauth.register(
 
 # Create your views here.
 def authn(request, user=None):
-    redirect_uri = request.build_absolute_uri(reverse(user_data))
+    redirect_uri = request.build_absolute_uri(reverse(authn_redirect))
     state = request.GET.get('next')  # typically encrypted
     return oauth.okta.authorize_redirect(request, redirect_uri, state=state) 
 
-def user_data(request):
+def authn_redirect(request):
     token = oauth.okta.authorize_access_token(request)
-    user_data = oauth.okta.parse_id_token(request, token)
+    user_info = oauth.okta.parse_id_token(request, token)
     user, _ = User.objects.get_or_create(
-        username=user_data.get('preferred_username'),
-        first_name=user_data.get('name').split(' ')[0],
-        last_name=user_data.get('name').split(' ')[1],
-        email=user_data.get('email'),
+        username=user_info.get('preferred_username'),
+        first_name=user_info.get('name').split(' ')[0],
+        last_name=user_info.get('name').split(' ')[1],
+        email=user_info.get('email'),
         is_staff=True,
         is_superuser=True,
     )
