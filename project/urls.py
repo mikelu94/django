@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from oidc.views import authn, user_logout
 
 urlpatterns = [
     path('', include('oidc.urls')),
     path('api/', include('api.urls')),
+    path('admin/login/', authn),
+    path('admin/logout/', user_logout),
     path('admin/', admin.site.urls),
 ]
