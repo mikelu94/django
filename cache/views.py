@@ -6,7 +6,7 @@ import json
 
 @csrf_exempt
 @require_GET
-def cache_get(request, key):
+def get(request, key):
     value = cache.get(key)
     if value is None:
         return HttpResponseNotFound()
@@ -14,7 +14,7 @@ def cache_get(request, key):
 
 @csrf_exempt
 @require_POST
-def cache_set(request, key):
+def set(request, key):
     request_json_data = json.loads(request.body)
     value = request_json_data.get('value')
     if value is None:
@@ -24,7 +24,7 @@ def cache_set(request, key):
 
 @csrf_exempt
 @require_http_methods(['DELETE'])
-def cache_delete(request, key):
+def delete(request, key):
     if cache.get(key) is None:
         return HttpResponseNotFound()
     cache.delete(key)
