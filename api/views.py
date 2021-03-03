@@ -1,8 +1,6 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
-from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.core.cache import cache
 from django.views import View
 from django.core.exceptions import ObjectDoesNotExist
 import json
@@ -75,29 +73,3 @@ class ElementView(RestView):
         request_json_data['set'] = Set.objects.get(uuid=request_json_data['set_uuid'])
         del request_json_data['set_uuid']
         return request_json_data
-
-@csrf_exempt
-@require_GET
-def cache_get(request, key):
-    value = cache.get(key)
-    if value is None:
-        return HttpResponseNotFound()
-    return HttpResponse(value)
-
-@csrf_exempt
-@require_POST
-def cache_set(request, key):
-    request_json_data = json.loads(request.body)
-    value = request_json_data.get('value')
-    if value is None:
-        return HttpResponseBadRequest()
-    cache.set(key, value)
-    return HttpResponse()
-
-@csrf_exempt
-@require_http_methods(['DELETE'])
-def cache_delete(request, key):
-    if cache.get(key) is None:
-        return HttpResponseNotFound()
-    cache.delete(key)
-    return HttpResponse()

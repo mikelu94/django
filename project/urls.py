@@ -20,6 +20,7 @@ from oidc.views import authn, user_logout
 urlpatterns = [
     path('', include('oidc.urls')),
     path('api/', include('api.urls')),
+    path('cache/', include('cache.urls')),
     path('admin/login/', authn),
     path('admin/logout/', user_logout),
     path('admin/', admin.site.urls),
