@@ -34,6 +34,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'cache.apps.CacheConfig',
+    'kv.apps.KvConfig',
+    'task_queue.apps.TaskQueueConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,10 +81,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': 'postgres',
+        'NAME': None,
+        'USER': None,
+        'PASSWORD': None,
+        'HOST': None,
         'PORT': '5432',
     }
 }
@@ -90,12 +92,14 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'memcached:11211',
+        'LOCATION': None,
     }
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_SERIALIZER = 'json'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -136,6 +140,27 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/login'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'logstash': {
+            'level': 'DEBUG',
+            'class': 'logstash.TCPLogstashHandler',
+            'host': None,
+            'port': 5959,
+            'version': 1,
+            'message_type': 'django',
+            'fqdn': False,
+            'tags': [],
+        }
+    },
+    'root': {
+        'handlers': ['logstash'],
+        'level': 'DEBUG'
+    },
+}
 
 AUTHLIB_OAUTH_CLIENTS = {
     'okta': {

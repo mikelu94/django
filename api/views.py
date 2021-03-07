@@ -4,8 +4,12 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.core.exceptions import ObjectDoesNotExist
 import json
+import logging
 
 from .models import Set, Element
+
+logger = logging.getLogger(__name__)
+
 
 class RestView(View):
     model = None
@@ -16,8 +20,10 @@ class RestView(View):
     def get(self, request, uuid=None):
         if uuid is None:
             model_objects = [str(model_object.__dict__) for model_object in self.model.objects.all().iterator()]
+            logger.info(f'Reading all {self.model.__name__} objects')
             return HttpResponse(f'[{", ".join(model_objects)}]')
         try:
+            logger.info(f'Attempting to read {self.model.__name__} object')
             return HttpResponse(str(self.model.objects.get(uuid=uuid).__dict__))
         except ObjectDoesNotExist:
             return HttpResponseNotFound()
@@ -26,6 +32,7 @@ class RestView(View):
         if uuid is not None:
             return HttpResponseNotFound()
         try:
+            logger.info(f'Attempting to create new {self.model.__name__} object')
             request_json_data = self.load_request_json_data(request)
             self.model.objects.create(**request_json_data)
             return HttpResponse()
@@ -36,6 +43,7 @@ class RestView(View):
         if uuid is None or not self.model.objects.filter(uuid=uuid).exists():
             return HttpResponseNotFound()
         try:
+            logger.info(f'Attempting to overwrite existing {self.model.__name__} object')
             request_json_data = self.load_request_json_data(request)
             for field in self.model._meta.fields:
                 if field.name not in request_json_data:
@@ -49,6 +57,7 @@ class RestView(View):
         if uuid is None or not self.model.objects.filter(uuid=uuid).exists():
             return HttpResponseNotFound()
         try:
+            logger.info(f'Attempting to modify existing {self.model.__name__} object')
             request_json_data = self.load_request_json_data(request)
             self.model.objects.filter(uuid=uuid).update(**request_json_data)
             return HttpResponse()
@@ -58,6 +67,7 @@ class RestView(View):
     def delete(self, request, uuid=None):
         if uuid is None or not self.model.objects.filter(uuid=uuid).exists():
             return HttpResponseNotFound()
+        logger.info(f'Attempting to delete {self.model.__name__} object')
         self.model.objects.get(uuid=uuid).delete()
         return HttpResponse() 
 

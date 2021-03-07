@@ -1,5 +1,5 @@
 version: '3'
-services: 
+services:
   app:
     container_name: 'django'
     command: python manage.py runserver 0:8000
@@ -7,9 +7,24 @@ services:
     depends_on:
       - db
       - cache
+      - kv
+      - mq
+      - logging
     ports: 
       - '8000:8000'
     tty: true
+    volumes:
+      - ./:/usr/src/app
+  celery:
+    container_name: 'celery_worker'
+    command: celery -A project worker -l info
+    build: .
+    depends_on:
+      - db
+      - cache
+      - kv
+      - mq
+      - logging
     volumes:
       - ./:/usr/src/app
   db:
@@ -28,5 +43,29 @@ services:
     image: memcached
     ports:
       - '11211:11211'
+  kv:
+    container_name: 'redis'
+    image: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - kv_data:/data
+  mq:
+    container_name: 'rabbitmq'
+    image: rabbitmq:management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - mq_data:/var/lib/rabbitmq
+  logging:
+    container_name: 'logstash'
+    image: docker.elastic.co/logstash/logstash:7.11.1
+    ports:
+      - '5959:5959'
+    volumes:
+      - './etc/logstash.conf:/usr/share/logstash/pipeline/logstash.conf'
 volumes:
   db_data:
+  kv_data:
+  mq_data:

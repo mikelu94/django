@@ -1,4 +1,5 @@
-from .base import * 
+from .base import *
+import redis
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'fake secret key for development purposes'
@@ -8,24 +9,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DATABASES['default']['NAME'] = 'django'
+DATABASES['default']['USER'] = 'user'
+DATABASES['default']['PASSWORD'] = 'password'
+DATABASES['default']['HOST'] = 'postgres'
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+CACHES['default']['LOCATION'] = 'memcached:11211'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': 'postgres',
-        'PORT': '5432',
-    }
-}
+REDIS = redis.Redis(host='redis', port=6379, db=0)
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'memcached:11211',
-    }
-}
+CELERY_BROKER_URL = 'amqp://rabbitmq:5672'
+
+LOGGING['handlers']['logstash']['host'] = 'logstash'
