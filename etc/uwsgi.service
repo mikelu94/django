@@ -3,7 +3,7 @@ Description=Django Application
 
 [Service]
 Type=simple
-PIDFile=/app/django/etc/uwsgi.pid
+PIDFile=/var/run/django.pid
 User=root
 Group=root
 WorkingDirectory=/app/django/
