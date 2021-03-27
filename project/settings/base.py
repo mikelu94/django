@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'cache.apps.CacheConfig',
     'kv.apps.KvConfig',
+    'oidc.apps.OidcConfig',
+    'pub_sub.apps.PubSubConfig',
     'task_queue.apps.TaskQueueConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -101,6 +103,9 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_SERIALIZER = 'json'
 
+KAFKA_TOPIC = 'messages'
+KAFKA_CONSUMER_GROUP_ID = 'test-group'
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -146,7 +151,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'logstash': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logstash.TCPLogstashHandler',
             'host': None,
             'port': 5959,
@@ -158,7 +163,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['logstash'],
-        'level': 'DEBUG'
+        'level': 'INFO'
     },
 }
 

@@ -20,4 +20,6 @@ REDIS = redis.Redis(host='redis', port=6379, db=0)
 
 CELERY_BROKER_URL = 'amqp://rabbitmq:5672'
 
+KAFKA_SERVERS = ['kafka:9092']
+
 LOGGING['handlers']['logstash']['host'] = 'logstash'

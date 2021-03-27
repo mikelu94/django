@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('cache/', include('cache.urls')),
     path('kv/', include('kv.urls')),
+    path('pub_sub/', include('pub_sub.urls')),
     path('task_queue/', include('task_queue.urls')),
     path('admin/login/', authn),
     path('admin/logout/', user_logout),

@@ -20,6 +20,8 @@ REDIS = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 CELERY_BROKER_URL = 'amqp://127.0.0.1:5672'
 
+KAFKA_SERVERS = ['127.0.0.1:9092']
+
 LOGGING['handlers']['logstash']['host'] = '127.0.0.1'
 
 STATIC_ROOT = '/static'

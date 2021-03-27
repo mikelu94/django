@@ -10,7 +10,8 @@ services:
       - kv
       - mq
       - logging
-    ports: 
+      - bus
+    ports:
       - '8000:8000'
     tty: true
     volumes:
@@ -20,11 +21,15 @@ services:
     command: celery -A project worker -l info
     build: .
     depends_on:
-      - db
-      - cache
-      - kv
-      - mq
-      - logging
+      - app
+    volumes:
+      - ./:/usr/src/app
+  bus_consumer:
+    container_name: 'kafka_consumer'
+    command: python manage.py kafka_consume
+    build: .
+    depends_on:
+      - app
     volumes:
       - ./:/usr/src/app
   db:
@@ -65,6 +70,22 @@ services:
       - '5959:5959'
     volumes:
       - './etc/logstash.conf:/usr/share/logstash/pipeline/logstash.conf'
+  controller:
+    container_name: zookeeper
+    image: zookeeper
+    ports:
+      - '2181:2181'
+  bus:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    depends_on:
+      - controller
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    ports:
+      - '9092:9092'
 volumes:
   db_data:
   kv_data:
