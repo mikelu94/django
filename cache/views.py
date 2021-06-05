@@ -1,9 +1,10 @@
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
-from django.views.decorators.http import require_http_methods, require_GET, require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.core.cache import cache
 import json
 import logging
+
+from django.core.cache import cache
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 logger = logging.getLogger(__name__)
 

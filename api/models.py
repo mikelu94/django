@@ -1,5 +1,6 @@
-from django.db import models
 import uuid
+
+from django.db import models
 
 class Set(models.Model):
     uuid = models.UUIDField(db_column='id', primary_key=True, default=uuid.uuid4, editable=False)

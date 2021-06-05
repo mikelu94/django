@@ -1,10 +1,11 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
-from kafka import KafkaConsumer
-from kafka.errors import NoBrokersAvailable
-import time
 import json
 import logging
+import time
+
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from kafka import KafkaConsumer
+from kafka.errors import NoBrokersAvailable
 
 logger = logging.getLogger(__name__)
 

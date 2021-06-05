@@ -1,12 +1,13 @@
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.views import View
-from django.core.exceptions import ObjectDoesNotExist
 import json
 import logging
 
-from .models import Set, Element
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import Element, Set
 
 logger = logging.getLogger(__name__)
 
@@ -71,9 +72,11 @@ class RestView(View):
         self.model.objects.get(uuid=uuid).delete()
         return HttpResponse() 
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class SetView(RestView):
     model = Set
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ElementView(RestView):

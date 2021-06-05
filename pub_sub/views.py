@@ -1,11 +1,12 @@
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from kafka import KafkaProducer
-from kafka.errors import NoBrokersAvailable
 import json
 import logging
+
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from kafka import KafkaProducer
+from kafka.errors import NoBrokersAvailable
 
 logger = logging.getLogger(__name__)
 

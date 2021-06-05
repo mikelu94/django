@@ -1,11 +1,13 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.contrib.auth import login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from authlib.integrations.django_client import OAuth
 import logging
+
+from authlib.integrations.django_client import OAuth
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +29,7 @@ def authn(request, user=None):
     logger.info("Initiating SSO")
     return oauth.okta.authorize_redirect(request, redirect_uri, state=state) 
 
+
 def authn_redirect(request):
     logging.info('SSO callback invoked')
     token = oauth.okta.authorize_access_token(request)
@@ -45,10 +48,12 @@ def authn_redirect(request):
     state = request.GET.get('state')
     return redirect(state)
 
+
 def user_logout(request):
     logging.info(f'Logging out f{request.user}')
     logout(request)
     return HttpResponse('You have been logged out.')
+
 
 @login_required
 def index(request):
