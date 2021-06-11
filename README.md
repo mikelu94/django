@@ -14,7 +14,7 @@ Some django projects that I wrote.
 - PostgreSQL
 - Memcached
 
-## How to Set Up Development Environment (localhost)
+## How to Set Up Development Environment (`localhost`)
 
 ```bash
 $ docker-compose up -d
