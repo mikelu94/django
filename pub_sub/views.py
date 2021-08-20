@@ -16,7 +16,10 @@ logger = logging.getLogger(__name__)
 def produce(request):
     logger.info('Attempting to publish to Kafka')
     try:
-        producer = KafkaProducer(bootstrap_servers=settings.KAFKA_SERVERS)
+        producer = KafkaProducer(
+            bootstrap_servers=settings.KAFKA_SERVERS,
+            value_serializer=lambda d: json.dumps(d).encode()
+        )
         json.loads(request.body)
         producer.send(settings.KAFKA_TOPIC, request.body)
         return HttpResponse()
