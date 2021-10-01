@@ -1,10 +1,12 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
+router = DefaultRouter()
+router.register(r'sets', views.SetViewSet)
+router.register(r'elements', views.ElementViewSet)
+
 urlpatterns = [
-    path('set', views.SetView.as_view(), name='set'),
-    path('set/<uuid:uuid>', views.SetView.as_view(), name='set'),
-    path('element', views.ElementView.as_view(), name='element'),
-    path('element/<uuid:uuid>', views.ElementView.as_view(), name='element'),
+    path('', include(router.urls)),
 ]

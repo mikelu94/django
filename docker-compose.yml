@@ -65,7 +65,9 @@ services:
       - mq_data:/var/lib/rabbitmq
   logging:
     container_name: 'logstash'
-    image: docker.elastic.co/logstash/logstash:7.14.0
+    image: docker.elastic.co/logstash/logstash:7.15.0
+    environment:
+      - XPACK_MONITORING_ENABLED=false
     ports:
       - '5959:5959'
     volumes:
