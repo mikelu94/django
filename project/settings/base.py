@@ -164,6 +164,13 @@ LOGGING = {
             'tags': [],
         }
     },
+    'loggers': {
+        '': {
+            'handlers': ['logstash'],
+            'level': 'INFO',
+            'propogate': False
+        }
+    },
     'root': {
         'handlers': ['logstash'],
         'level': 'INFO'
