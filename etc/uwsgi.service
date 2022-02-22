@@ -3,11 +3,11 @@ Description=Django Application
 
 [Service]
 Type=simple
-PIDFile=/var/run/django.pid
+PIDFile=/var/run/app.pid
 User=root
 Group=root
-WorkingDirectory=/app/django/
-ExecStart=/usr/local/bin/uwsgi /app/django/etc/uwsgi.ini
+WorkingDirectory=/app/
+ExecStart=/usr/local/bin/uwsgi /app/etc/uwsgi.ini
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-failure

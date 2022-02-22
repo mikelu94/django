@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    container_name: 'django'
+    container_name: app
     command: python manage.py runserver 0:8000
     build: .
     depends_on:
@@ -15,7 +15,7 @@ services:
       - '8000:8000'
     tty: true
     volumes:
-      - ./:/usr/src/app
+      - ./:/app
   celery:
     container_name: 'celery_worker'
     command: celery -A project worker -l info
@@ -23,17 +23,17 @@ services:
     depends_on:
       - app
     volumes:
-      - ./:/usr/src/app
+      - ./:/app
   bus_consumer:
-    container_name: 'kafka_consumer'
+    container_name: kafka_consumer
     command: python manage.py kafka_consume
     build: .
     depends_on:
       - app
     volumes:
-      - ./:/usr/src/app
+      - ./:/app
   db:
-    container_name: 'postgres'
+    container_name: postgres
     image: postgres
     environment:
       - POSTGRES_DB=django
@@ -49,14 +49,14 @@ services:
     ports:
       - '11211:11211'
   kv:
-    container_name: 'redis'
+    container_name: redis
     image: redis
     ports:
       - '6379:6379'
     volumes:
       - kv_data:/data
   mq:
-    container_name: 'rabbitmq'
+    container_name: rabbitmq
     image: rabbitmq:management
     ports:
       - '5672:5672'
@@ -64,7 +64,7 @@ services:
     volumes:
       - mq_data:/var/lib/rabbitmq
   logging:
-    container_name: 'logstash'
+    container_name: logstash
     image: docker.elastic.co/logstash/logstash:7.15.0
     environment:
       - XPACK_MONITORING_ENABLED=false

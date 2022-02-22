@@ -6,6 +6,7 @@ Some django projects that I wrote.
 
 - Docker
 - Kubernetes
+- `kubectl`
 
 ## Technologies
 
@@ -13,12 +14,17 @@ Some django projects that I wrote.
 - Django
 - PostgreSQL
 - Memcached
+- Redis
+- RabbitMQ
+- Kafka
+- Open ID Connect
+- Logstash
 
 ## How to Set Up Development Environment (`localhost`)
 
 ```bash
 $ docker-compose up -d
-$ docker exec -it django bash
+$ docker exec -it app bash
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
@@ -32,4 +38,6 @@ $ docker push [dockerhub-username]/[image-name]:[tag]
 
 ## How to Deploy to Production Environment (Kubernetes)
 
-`kubectl`.
+```bash
+$ kubectl apply -f k8s
+```
