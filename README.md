@@ -5,8 +5,9 @@ Some django projects that I wrote.
 ## Dependencies
 
 - Docker
-- Kubernetes
 - `kubectl`
+- `minikube`
+- Okta Developer Account (Free)
 
 ## Technologies
 
@@ -16,28 +17,57 @@ Some django projects that I wrote.
 - Memcached
 - Redis
 - RabbitMQ
-- Kafka
 - Open ID Connect
 - Logstash
+
+## Preliminaries
+
+1. Create an OIDC application (see [instructions](https://help.okta.com/en-us/Content/Topics/Apps/Apps_App_Integration_Wizard_OIDC.htm)).
+
+2. Edit `.env`:
+
+```bash
+CLIENT_ID=<Client ID here>
+CLIENT_SECRET=<Client Secret here>
+OKTA_DOMAIN=<Your Okta Domain here>
+```
+
+3. Edit 
 
 ## How to Set Up Development Environment (`localhost`)
 
 ```bash
-$ docker-compose up -d
+$ docker compose up -d
 $ docker exec -it app bash
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
 
-## How to Build and Publish Image
+## How to Set Up Production Environment (`minikube`)
+
+1. Start `minikube`:
 
 ```bash
-$ docker build -t [dockerhub-username]/[image-name]:[tag] .
-$ docker push [dockerhub-username]/[image-name]:[tag]
+$ minikube start --addons=ingress
 ```
 
-## How to Deploy to Production Environment (Kubernetes)
+2. Build and Publish Image:
 
 ```bash
-$ kubectl apply -f k8s
+$ eval $(minikube -p minikube docker-env)
+$ docker build -t app .
+```
+
+3. Deploy to Production Environment:
+
+```bash
+$ kubectl apply -f kubernetes
+```
+
+4. Create Tables and Superuser:
+
+```bash
+$ kubectl exec -it <App Pod name here> -- bash
+$ python manage.py migrate
+$ python manage.py createsuperuser
 ```

@@ -10,9 +10,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-DATABASES['default']['NAME'] = 'django'
-DATABASES['default']['USER'] = 'django_user'
-DATABASES['default']['PASSWORD'] = 'password'
 DATABASES['default']['HOST'] = '127.0.0.1'
 
 CACHES['default']['LOCATION'] = '127.0.0.1:11211'
@@ -20,8 +17,6 @@ CACHES['default']['LOCATION'] = '127.0.0.1:11211'
 REDIS = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 CELERY_BROKER_URL = 'amqp://127.0.0.1:5672'
-
-KAFKA_SERVERS = ['127.0.0.1:9092']
 
 LOGGING['handlers']['logstash']['host'] = '127.0.0.1'
 

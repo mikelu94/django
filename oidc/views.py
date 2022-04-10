@@ -2,6 +2,7 @@ import logging
 
 from authlib.integrations.django_client import OAuth
 from authlib.integrations.requests_client import OAuth2Auth
+from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -16,10 +17,10 @@ logger = logging.getLogger(__name__)
 oauth = OAuth()
 oauth.register(
     name='okta',
-    authorization_endpoint='https://dev-4359056.okta.com/oauth2/default/v1/authorize',
-    jwks_uri='https://dev-4359056.okta.com/oauth2/default/v1/keys',
-    token_endpoint='https://dev-4359056.okta.com/oauth2/default/v1/token',
-    # server_metadata_url='https://dev-4359056.okta.com/oauth2/default/.well-known/openid-configuration',  # alternative to 3 parameters above
+    authorization_endpoint=f'{settings.OKTA_DOMAIN}/oauth2/default/v1/authorize',
+    jwks_uri=f'{settings.OKTA_DOMAIN}/oauth2/default/v1/keys',
+    token_endpoint=f'{settings.OKTA_DOMAIN}/oauth2/default/v1/token',
+    # server_metadata_url=f'{settings.OKTA_DOMAIN}/oauth2/default/.well-known/openid-configuration',  # alternative to 3 parameters above
     client_kwargs = { 'scope': 'openid profile email' }
 )
 
@@ -35,33 +36,33 @@ def authn(request, user=None):
 def authn_redirect(request):
     logging.info('SSO callback invoked')
     access_token = oauth.okta.authorize_access_token(request)
-    id_token = oauth.okta.parse_id_token(request, access_token)
+    userinfo = access_token.get('userinfo')
 
-    resp = requests.get('https://dev-4359056.okta.com/oauth2/default/v1/userinfo', auth=OAuth2Auth(access_token))
-    user_info = resp.json()
+    resp = requests.get(f'{settings.OKTA_DOMAIN}/oauth2/default/v1/userinfo', auth=OAuth2Auth(access_token))
+    additional_userinfo = resp.json()
 
     user, _ = User.objects.get_or_create(
-        username=id_token.get('preferred_username'),
-        first_name=user_info.get('given_name'),
-        last_name=user_info.get('family_name'),
-        email=id_token.get('email'),
+        username=userinfo.get('preferred_username'),
+        first_name=additional_userinfo.get('given_name'),
+        last_name=additional_userinfo.get('family_name'),
+        email=userinfo.get('email'),
         is_staff=True,
         is_superuser=True,
     )
     login(request, user)
-    logging.info(f'Logging in f{user}')
+    logging.info('Logging in %s', user)
 
     state = request.GET.get('state')
     return redirect(state)
 
 
 def user_logout(request):
-    logging.info(f'Logging out f{request.user}')
+    logging.info('Logging out %s', request.user)
     logout(request)
     return HttpResponse('You have been logged out.')
 
 
 @login_required
 def index(request):
-    logging.info(f'{request.user.email} accessed oidc index')
+    logging.info('%s accessed oidc index', request.user.email)
     return HttpResponse(f'Hi {request.user.email}, You are logged in.')

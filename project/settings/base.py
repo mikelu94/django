@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
-
-from .config import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,9 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'cache.apps.CacheConfig',
-    'kv.apps.KvConfig',
     'oidc.apps.OidcConfig',
-    'pub_sub.apps.PubSubConfig',
     'task_queue.apps.TaskQueueConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -86,9 +83,9 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': None,
-        'USER': None,
-        'PASSWORD': None,
+        'NAME': os.getenv('POSTGRES_DJANGO_DB'),
+        'USER': os.getenv('POSTGRES_DJANGO_USER'),
+        'PASSWORD': os.getenv('POSTGRES_DJANGO_PASSWORD'),
         'HOST': None,
         'PORT': '5432',
     }
@@ -177,9 +174,11 @@ LOGGING = {
     },
 }
 
+OKTA_DOMAIN = os.getenv('OKTA_DOMAIN')
+
 AUTHLIB_OAUTH_CLIENTS = {
     'okta': {
-        'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET,
+        'client_id': os.getenv('CLIENT_ID'),
+        'client_secret': os.getenv('CLIENT_SECRET'),
     }
 }
