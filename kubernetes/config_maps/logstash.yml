@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash
+data:
+  logstash.conf: |
+    input {
+        tcp {
+        port => 5959
+        codec => json
+      }
+    }
+    output {
+      stdout {
+          codec => json_lines
+      }
+    }

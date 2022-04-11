@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker
+  labels:
+    app: celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-worker
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+    spec:
+      containers:
+      - name: celery-worker
+        image: app
+        imagePullPolicy: Never
+        command: ['celery', '-A', 'project', 'worker', '-l', 'info']
+        env:
+        - name: POSTGRES_DJANGO_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: POSTGRES_DJANGO_DB
+              optional: false
+        - name: POSTGRES_DJANGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: POSTGRES_DJANGO_USER
+              optional: false
+        - name: POSTGRES_DJANGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: POSTGRES_DJANGO_PASSWORD
+              optional: false
+        - name: CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: CLIENT_ID
+              optional: false
+        - name: CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: CLIENT_SECRET
+              optional: false
+        - name: OKTA_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: OKTA_DOMAIN
+              optional: false
+        - name: POSTGRES_SVC
+          value: postgres
+        - name: MEMCACHED_SVC
+          value: memcached
+        - name: REDIS_SVC
+          value: redis
+        - name: RABBITMQ_SVC
+          value: rabbitmq
+        - name: LOGSTASH_SVC
+          value: logstash
+        - name: LOGSTASH_PORT
+          value: '5959'

@@ -5,6 +5,7 @@ services:
     container_name: app
     command: python manage.py runserver 0:8000
     environment:
+      - DJANGO_SETTINGS_MODULE=project.settings.dev
       - POSTGRES_DJANGO_DB=django
       - POSTGRES_DJANGO_USER=django
       - POSTGRES_DJANGO_PASSWORD=password
@@ -27,6 +28,7 @@ services:
     container_name: 'celery_worker'
     command: celery -A project worker -l info
     environment:
+      - DJANGO_SETTINGS_MODULE=project.settings.dev
       - POSTGRES_DJANGO_DB=django
       - POSTGRES_DJANGO_USER=django
       - POSTGRES_DJANGO_PASSWORD=password
@@ -61,7 +63,7 @@ services:
       - mq_data:/var/lib/rabbitmq
   logging:
     container_name: logstash
-    image: docker.elastic.co/logstash/logstash:8.0.1
+    image: docker.elastic.co/logstash/logstash:8.1.2
     environment:
       - XPACK_MONITORING_ENABLED=false
     volumes:

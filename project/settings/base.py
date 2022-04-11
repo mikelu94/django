@@ -154,7 +154,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logstash.TCPLogstashHandler',
             'host': None,
-            'port': 5959,
+            'port': None,
             'version': 1,
             'message_type': 'django',
             'fqdn': False,
