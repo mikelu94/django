@@ -4,8 +4,8 @@ Django
 djangorestframework
 drf-yasg
 kafka-python
+psycopg2
 python-logstash
-psycopg2-binary
 python-memcached
 redis
 requests
