@@ -69,6 +69,12 @@ spec:
               name: oidc
               key: OKTA_DOMAIN
               optional: false
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app
+              key: DJANGO_SECRET_KEY
+              optional: false
         - name: POSTGRES_SVC
           value: postgres
         - name: MEMCACHED_SVC

@@ -2,9 +2,6 @@ import redis
 
 from .base import *
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g-2c^+c++d$17y-9ir+0o4-tf3%5du2v2ah&=#b85@5mlb19+_'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 

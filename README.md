@@ -24,20 +24,29 @@ Some django projects that I wrote.
 
 1. Create an OIDC application (see [instructions](https://help.okta.com/en-us/Content/Topics/Apps/Apps_App_Integration_Wizard_OIDC.htm)).
 
-2. Create `./.env`:
+2. Run `python3 -c 'import secrets; print(secrets.token_urlsafe())'` and save the generated secret key.
+
+3. Create `./.env`:
 
 ```bash
 CLIENT_ID=<Client ID here>
 CLIENT_SECRET=<Client Secret here>
 OKTA_DOMAIN=<Your Okta Domain here>
+DJANGO_SECRET_KEY=<Your Secret Key here>
 ```
 
-3. Edit `kubernetes/secrets/oidc.yml`:
+4. Edit `kubernetes/secrets/oidc.yml`:
 
 ```yaml
 CLIENT_ID: <Base64 Encoding of Client ID here>
 CLIENT_SECRET: <Base64 Encoding of Client Secret here>
 OKTA_DOMAIN: <Base64 Encoding of Your Okta Domain here>
+```
+
+5. Edit `kubernetes/secrets/app.yml`:
+
+```yaml
+DJANGO_SECRET_KEY: <Base64 Encoding of Your Secret Key here>
 ```
 
 ## How to Set Up Development Environment (`localhost`)

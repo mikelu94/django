@@ -44,4 +44,3 @@ spec:
             items:
             - key: "logstash.conf"
               path: "logstash.conf"
-
