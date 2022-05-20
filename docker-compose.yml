@@ -15,7 +15,6 @@ services:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     depends_on:
       - db
-      - cache
       - kv
       - mq
       - logging
@@ -50,9 +49,6 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - db_data:/var/lib/postgresql/data
-  cache:
-    container_name: memcached
-    image: memcached
   kv:
     container_name: redis
     image: redis

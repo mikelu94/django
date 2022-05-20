@@ -14,7 +14,6 @@ Some django projects that I wrote.
 - Python 3
 - Django
 - PostgreSQL
-- Memcached
 - Redis
 - RabbitMQ
 - Open ID Connect

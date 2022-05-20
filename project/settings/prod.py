@@ -9,9 +9,9 @@ ALLOWED_HOSTS = ['*']
 
 DATABASES['default']['HOST'] = os.getenv('POSTGRES_SVC')
 
-CACHES['default']['LOCATION'] = f"{os.getenv('MEMCACHED_SVC')}:11211"
+CACHES['default']['LOCATION'] = f"redis://{os.getenv('REDIS_SVC')}:6379"
 
-REDIS = redis.Redis(host=os.getenv('REDIS_SVC'), port=6379, db=0)
+REDIS = redis.Redis(host=os.getenv('REDIS_SVC'), port=6379, db=1)
 
 CELERY_BROKER_URL = f"amqp://{os.getenv('RABBITMQ_SVC')}:5672"
 

@@ -77,8 +77,6 @@ spec:
               optional: false
         - name: POSTGRES_SVC
           value: postgres
-        - name: MEMCACHED_SVC
-          value: memcached
         - name: REDIS_SVC
           value: redis
         - name: RABBITMQ_SVC

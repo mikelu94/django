@@ -9,9 +9,9 @@ ALLOWED_HOSTS = []
 
 DATABASES['default']['HOST'] = 'postgres'
 
-CACHES['default']['LOCATION'] = 'memcached:11211'
+CACHES['default']['LOCATION'] = 'redis://redis:6379'
 
-REDIS = redis.Redis(host='redis', port=6379, db=0)
+REDIS = redis.Redis(host='redis', port=6379, db=1)
 
 CELERY_BROKER_URL = 'amqp://rabbitmq:5672'
 
