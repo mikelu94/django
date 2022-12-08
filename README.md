@@ -34,18 +34,10 @@ OKTA_DOMAIN=<Your Okta Domain here>
 DJANGO_SECRET_KEY=<Your Secret Key here>
 ```
 
-4. Edit `kubernetes/secrets/oidc.yml`:
+4. Run `create_secrets.sh`:
 
-```yaml
-CLIENT_ID: <Base64 Encoding of Client ID here>
-CLIENT_SECRET: <Base64 Encoding of Client Secret here>
-OKTA_DOMAIN: <Base64 Encoding of Your Okta Domain here>
-```
-
-5. Edit `kubernetes/secrets/app.yml`:
-
-```yaml
-DJANGO_SECRET_KEY: <Base64 Encoding of Your Secret Key here>
+```bash
+$ ./create_secrets.sh
 ```
 
 ## How to Set Up Development Environment (`localhost`)
