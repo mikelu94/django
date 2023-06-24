@@ -3,7 +3,7 @@ celery
 Django
 djangorestframework
 drf-yasg
-psycopg2
+psycopg[binary]
 python-logstash
 python-memcached
 redis
