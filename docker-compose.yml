@@ -4,6 +4,11 @@ services:
     build: .
     container_name: app
     command: python manage.py runserver 0:8000
+    develop:
+      watch:
+        - action: sync+restart
+          path: .
+          target: /app
     environment:
       - DJANGO_SETTINGS_MODULE=project.settings.dev
       - POSTGRES_DJANGO_DB=django
@@ -21,8 +26,6 @@ services:
     ports:
       - '8000:8000'
     tty: true
-    volumes:
-      - ./:/app
   celery:
     build: .
     container_name: 'celery_worker'

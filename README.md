@@ -43,7 +43,7 @@ $ ./create_secrets.sh
 ## How to Set Up Development Environment (`localhost`)
 
 ```bash
-$ docker compose up -d
+$ docker compose watch
 $ docker exec -it app bash
 $ python manage.py migrate
 ```
